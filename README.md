@@ -40,10 +40,10 @@ DSH 读取四个技能根目录（任选一个）：
 
 ```powershell
 # 全局：所有项目都能用
-git clone https://github.com/<用户名>/imnerd "$env:USERPROFILE\.agents\skills\imnerd"
+git clone https://github.com/huhahacn/imnerd "$env:USERPROFILE\.agents\skills\imnerd"
 
 # 只给当前项目用
-git clone https://github.com/<用户名>/imnerd ".\.dsh\skills\imnerd"
+git clone https://github.com/huhahacn/imnerd ".\.dsh\skills\imnerd"
 ```
 
 | 工具 | 技能根 |
