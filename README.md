@@ -1,66 +1,90 @@
 # imnerd
 
-让 AI 回答里的黑话，变成**大白话 + 一个具体例子**。
+Turn jargon in an AI reply into **plain words plus one concrete example**.
 
-一个 [Agent Skill](https://code.claude.com/docs/en/skills)（`SKILL.md` 格式，DSH / Claude Code / Codex 通用）。
+An [Agent Skill](https://code.claude.com/docs/en/skills) (`SKILL.md` format — works with DSH, Claude Code, and Codex).
 
-## 解决什么
+## The problem
 
-AI 默认爱写「该接口采用异步消息队列解耦，并通过失败重试与死信队列保证最终一致性」这种话。装上之后：
+By default an AI writes sentences like:
 
-> **改前**：该方案不具备可扩展性。
+> The endpoint is decoupled via an asynchronous message queue, with retries and a dead-letter queue providing eventual consistency.
+
+With imnerd installed:
+
+> **Before**: The design isn't scalable.
 >
-> **改后**：现在 100 个用户能跑，1000 个就卡死，因为每加一个用户都要改一次代码。
+> **After**: 100 users work today. 1,000 break it, because every new user means editing code.
 
-核心原则一句话：**术语不是不能出现，是不能裸奔。** 第一次出现 = 一句白话 + 一个例子，之后随便用。
+The whole rule in one line: **a term may appear, but it may never appear naked.** First mention = one plain sentence + one concrete example. After that, use it freely.
 
-## 什么时候触发
+## Two reader levels
 
-- 用户说：说人话 / 大白话 / 听不懂 / 太专业 / 什么意思 / 举个例子 / ELI5
-- 受众不是同行：客户、老板、产品、运营、新人
-- 一条回答里出现 ≥3 个没解释的术语或缩写
-- 写给人类看的文档：README、方案、周报、邮件、交付说明
+imnerd picks a level and says which one it used.
 
-## 里面有什么
+| | Level 1 — plain (default) | Level 2 — absolute beginner |
+|---|---|---|
+| Turn it on with | nothing, it is the default | "I'm a beginner" / "I'm a primary-school student" / 小学生 / 小白 / "explain like I'm 5" |
+| Terms | plain words first, term in brackets | none; unavoidable terms get an everyday analogy |
+| Sentence length | ≤ 20 words | ≤ 10 words, one idea each |
+| Analogy | domain-adjacent is fine | fridge, mailbox, classroom, traffic light |
+| Ends with | the next concrete action | one small action, doable in 2 minutes |
 
-| 段落 | 内容 |
+Level 2 example:
+
+> **Before**: Your session token expired, so we cleared the local cache and you need to re-authenticate.
+>
+> **After**: You were logged out. It happens when the "I'm still here" ticket runs out — like a library card that expires; the library still has your books, you just need a new card. Next: click "Sign in" and type your password. It takes 10 seconds.
+
+## When it triggers
+
+- Requests: "explain like I'm 5" / "I'm a beginner" / "plain English" / "too technical" / "give me an example" / 说人话 / 大白话 / 听不懂 / 太专业 / 什么意思 / 举个例子 / 小学生 / 小白
+- Audience is not a peer: client, boss, PM, ops, new hire
+- Three or more unexplained terms or acronyms in one reply
+- Human-facing writing: README, proposal, status update, email, handover notes
+
+## What's inside
+
+| Section | Content |
 |---|---|
-| 铁律 | 读者不看文档就能懂 —— 做不到就改，别发出去 |
-| 三步改写 | 圈黑话 → 换句式（名词→动词、被动→主动、抽象→具体数字）→ 配例子 |
-| 句式模板 | 「提升系统可用性」→「服务少挂：每月 4 小时 → 5 分钟」 |
-| 术语表 | 20 条现成翻译：幂等、缓存击穿、熔断、灰度、事务、技术债、闭环、赋能、SLO、P0/P1… |
-| **个人黑名单** | 一出现就换的词：赋能、抓手、颗粒度、对齐、打法、底层逻辑、复盘、首先/其次/综上、好问题/希望有帮助 |
-| 3 组前后对比 | 技术 / 职场 / 数据 |
-| 30 秒自检 | 缩写展开了吗、有具体例子或数字吗、单句 ≤25 字、长度 ≤1.5 倍 |
-| 别做过头 | 不牺牲精度、不幼稚化、代码命令 API 名原文照抄、用户用术语就跟着用 |
-| 借口表 | 挡掉「用户是工程师不用解释」这类偷懒 |
+| Two ways to use | you are writing a reply → self-check first; user pastes text → give the rewrite, no commentary |
+| Two reader levels | the Level 1 / Level 2 table, plus 5 Level 2 rules |
+| 3-step rewrite | circle the jargon → rebuild the sentence (noun→verb, passive→active, abstract→number) → add an example |
+| Sentence templates | "Improve system availability" → "Fewer outages: 4 hours a month → 5 minutes" |
+| Term bank | 20 ready-made translations: idempotent, cache stampede, circuit breaker, gradual rollout, technical debt, close the loop, SLO, P0/P1… |
+| **Personal blacklist** | swap on sight: empower, leverage, granularity, align, playbook, underlying logic, retro, first/second/in conclusion, great question, hope this helps |
+| 4 before/after rewrites | technical / workplace / data / Level 2 |
+| 30-second self-check | acronym expanded? example present? sentence ≤20 words? **reply ≤800 characters**? length ≤1.5×? would an outsider ask "what does that mean?" |
+| 800-character cap | every reply ≤800 chars — cut background, then the second example, then repetition; keep conclusion + one example + next action |
+| Don't overdo it | no accuracy loss, no condescension, copy code/commands/API names verbatim, follow the user's vocabulary |
+| Excuses table | blocks "the user is an engineer, no need to explain" and the other four |
 
-## 安装
+## Install
 
-DSH 读取四个技能根目录（任选一个）：
+DSH reads four skill roots (pick one):
 
 ```powershell
-# 全局：所有项目都能用
+# Global: available in every project
 git clone https://github.com/huhahacn/imnerd "$env:USERPROFILE\.agents\skills\imnerd"
 
-# 只给当前项目用
+# Current project only
 git clone https://github.com/huhahacn/imnerd ".\.dsh\skills\imnerd"
 ```
 
-| 工具 | 技能根 |
+| Tool | Skill roots |
 |---|---|
-| DSH | `~/.dsh/skills/`、`~/.agents/skills/`、`<项目>/.dsh/skills/`、`<项目>/.agents/skills/` |
+| DSH | `~/.dsh/skills/`, `~/.agents/skills/`, `<project>/.dsh/skills/`, `<project>/.agents/skills/` |
 | Claude Code | `~/.claude/skills/` |
 | Codex | `~/.agents/skills/` |
 
-也可以手动把 `SKILL.md` 放到 `<技能根>\imnerd\SKILL.md`。
+Or copy `SKILL.md` manually to `<skill root>\imnerd\SKILL.md`.
 
-## 用法
+## Usage
 
-装好即自动触发（`SKILL.md` 里 description 那行就是触发条件）。想手动叫：DSH 里输入 `/imnerd`，或直接说「用 imnerd 改写这段话」。
+It fires automatically once installed (the `description` line in `SKILL.md` is the trigger condition). To call it by hand: type `/imnerd` in DSH, or just say "rewrite this with imnerd".
 
-也可以只当模板抄：`SKILL.md` 里的术语表和前后对比示例，直接拿来当写作清单用。
+You can also lift the term bank and before/after examples straight out of `SKILL.md` as a writing checklist.
 
-## 许可
+## License
 
-MIT，见 [LICENSE](LICENSE)。随便用、随便改、随便发。
+MIT — see [LICENSE](LICENSE). Use it, change it, ship it.

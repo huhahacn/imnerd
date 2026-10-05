@@ -1,137 +1,180 @@
 ---
 name: imnerd
-description: Use when a reply contains jargon, acronyms, or abstract nouns the reader would have to look up — rewrite that professional/technical wording into everyday language plus one concrete example, number, or analogy. Also use when the user says 说人话 / 大白话 / 听不懂 / 太专业 / 什么意思 / 举个例子 / ELI5, or when the audience is non-technical (客户、老板、产品、运营、新人).
+description: Use when a reply contains jargon, acronyms, or abstract nouns the reader would have to look up — rewrite that professional/technical wording into everyday language plus one concrete example, number, or analogy. Also use when the user says explain like I'm 5 / I'm a beginner / I'm a primary-school student / plain English / too technical / what does that mean / give me an example, or the Chinese equivalents 说人话 / 大白话 / 听不懂 / 太专业 / 什么意思 / 举个例子 / 小学生 / 小白, or when the audience is non-technical (client, boss, PM, ops, new hire).
 ---
 
-# imnerd —— 凡是有黑话，就翻译成大白话 + 一个例子
+# imnerd — if it's jargon, translate it into plain words plus one example
 
-一句话：**术语不是不能出现，是不能裸奔。**
+**A term may appear. It may never appear naked.**
 
-术语第一次出现 = 一句白话 + 一个具体例子；之后随便用。
+First mention = one plain sentence + one concrete example. After that, use it freely.
 
-## 铁律
+## Iron law
 
 ```
-读者不看文档就能懂 —— 做不到就改，别发出去
+The reader must get it without opening a doc. If not, rewrite it. Never ship it as is.
 ```
 
-## 触发时机
+**Output cap: 800 characters.** Count characters including punctuation, ignore line breaks. Over the cap → cut, in this order: (1) background, (2) the second example, (3) repetition. Keep: conclusion + one example + the next action. The cap beats every other rule — a plain 2,000-character answer is still a wall of text.
 
-- 用户说：说人话、大白话、听不懂、太专业、什么意思、举个例子、ELI5
-- 受众不是同行：客户、老板、产品、运营、新人、非技术干系人
-- 你这条回答里出现 ≥3 个没解释的术语或缩写
-- 写给人看的文档：README、方案、周报、邮件、交付说明
+## When to use
 
-## 两种用法
+- Requests: "explain like I'm 5" / "I'm a beginner" / "I'm a primary-school student" / "plain English" / "too technical" / "what does that mean" / "give me an example" / 说人话 / 大白话 / 听不懂 / 太专业 / 什么意思 / 举个例子 / 小学生 / 小白
+- Audience is not a peer: client, boss, PM, ops, new hire, non-technical stakeholder
+- Three or more unexplained terms or acronyms in one reply
+- Human-facing writing: README, proposal, status update, email, handover notes
 
-1. **你正在写回答** → 出稿前按下面「30 秒自检」自己改一遍
-2. **用户贴来一段话要改写** → 保留全部事实和数字，只换表达，直接给改写版，不要附带讲解你的改法（他没问就不说）
+## Two ways to use it
 
-## 三步改写
+1. **You are writing a reply** → run the 30-second self-check below before sending.
+2. **The user pastes text to rewrite** → keep every fact and number, change only the wording, give the rewritten version directly. Don't explain your edits unless asked.
 
-1. **圈黑话**：缩写（QPS、RBAC、ETL、SLO）、名词化（可用性提升、链路优化）、行业比喻（中台、闭环、抓手、赋能）、框架自造词
-2. **换句子**：名词 → 动词；被动 → 谁对谁做了什么；抽象量词 → 具体数字
-3. **配例子**：一个数字 / 一个日常类比 / 一段最小代码 / 一个「张三下单」的场景。至少一个，缺了不算讲清楚
+## Pick a level first — and say which one you used
 
-## 句式模板
+Default is **Level 1**. Move to **Level 2** when the user says "I'm a beginner" / "小学生" / "小白" / "explain like I'm 5", or when they have asked "I don't understand" twice in one session.
 
-| 本来会写的 | 改成 |
+| | Level 1 — plain | Level 2 — absolute beginner |
+|---|---|---|
+| Terms | plain words first, the term in brackets after | none at all; if a term is unavoidable (it appears in the UI or an error), keep it verbatim and gloss it right after |
+| Sentence length | ≤ 20 words | ≤ 10 words, one idea per sentence |
+| Numbers | concrete: 800ms → 20ms | concrete plus a familiar yardstick: "faster than a blink" |
+| Analogy | domain-adjacent is fine | everyday only: fridge, mailbox, classroom, traffic light, LEGO |
+| Steps | numbered, any length | numbered, max 5, one action each |
+| Structure | short paragraphs | max 3 sentences per idea, blank line between ideas |
+| Ending | the next concrete action | one small action the reader can do in 2 minutes |
+| Banned | nothing extra | acronyms, "just", "simply", "obviously", "as you know" |
+
+### Level 2 in practice
+
+1. Lead with what it means for the reader, not how it works. "Your files won't be lost." Then, only if they care, how.
+2. Test every explanation with one question: could a 10-year-old follow this? If not, add a picture — "like a mailbox: you drop the letter in, someone else delivers it."
+3. Never write "it's simple" or "just do X". That is what makes a beginner feel stupid.
+4. If a term must stay, format it as: `term` — what it does, in one breath. Example: `cache` — a shelf where you keep things you will need again soon, so you don't walk back to the storeroom.
+5. Finish with one question, not five.
+
+## The 3-step rewrite
+
+1. **Circle the jargon** — acronyms (QPS, RBAC, ETL, SLO), nominalizations ("availability improvement", "pipeline optimization"), business metaphors ("middle platform", "close the loop", "lever"), framework-invented words.
+2. **Rebuild the sentence** — noun → verb; passive → who did what to whom; abstract quantity → concrete number.
+3. **Add an example** — one number / an everyday analogy / a minimal code snippet / a "Zhang San orders a coffee" scene. At least one. Without it you have not explained anything.
+
+## Sentence templates
+
+| Instead of | Write |
 |---|---|
-| 提升系统可用性 | 服务少挂：从每月挂 4 小时降到 5 分钟（99.9% → 99.99%） |
-| 通过缓存优化接口响应 | 把查过的结果先存起来，第二次查 800ms → 20ms |
-| 该方案不具备可扩展性 | 现在 100 个用户能跑，1000 个就卡死，因为每加一个用户都要改一次代码 |
-| 异步处理该任务 | 先把活扔进队列立刻返回，后台慢慢干；用户不用等 |
-| 需要做权限隔离 | 普通员工只能看自己的单子，主管能看全组的 |
-| 链路存在瓶颈 | 慢在半路某一段：查数据库那步占了 700ms，占总量 9 成 |
+| Improve system availability | Fewer outages: 4 hours a month → 5 minutes (99.9% → 99.99%) |
+| Optimize the endpoint with caching | Store the answer the first time; the second lookup goes 800ms → 20ms |
+| The design isn't scalable | 100 users work today. 1,000 break it, because every new user means editing code |
+| Handle the task asynchronously | Return "submitted" right away, do the work in the background; the user doesn't wait |
+| We need permission isolation | Staff see only their own orders; managers see the whole team's |
+| There's a bottleneck in the path | One step is slow: the database query takes 700ms — 90% of the total |
 
-## 个人黑名单（见到就换）
+## Term → plain words (example bank)
 
-下面这些词用户明确讨厌。出现就先删掉，再按上面格式重写：
-
-| 别写 | 写成 |
+| Term | Plain words |
 |---|---|
-| 赋能 | 给你工具或培训，让你自己能干 |
-| 抓手 | 从哪下手（例：先修登录页） |
-| 颗粒度 | 细到什么程度（例：按天还是按小时） |
-| 对齐 / 拉通 | 开会把话说清楚，大家理解一致 |
-| 打法 / 组合拳 | 具体做哪几件事 |
-| 底层逻辑 | 真正的原因 |
-| 复盘 | 事后总结：哪做对了、哪做错了 |
-| 首先 / 其次 / 综上 | 删掉，直接用序号或短句 |
-| 好问题 / 让我来看看 | 删掉，第一句就给答案或动作 |
-| 希望有帮助 / 还有其他需要吗 | 删掉，结尾换成「下一步做 X」 |
+| Idempotent (幂等) | Doing the same thing 10 times gives the same result as doing it once — double-clicking Submit doesn't charge you twice |
+| Cache stampede (缓存击穿) | A popular piece of data expires and thousands of requests hit the database at the same instant, flattening it |
+| Circuit breaker (熔断) | When the service behind you keeps failing, stop calling it and return a backup answer, so you don't die with it |
+| Gradual rollout (灰度发布) | Give 1% of users the new version first; if nothing breaks, give it to everyone |
+| Transaction (事务) | All the steps happen, or none do — the money leaving your account and arriving in theirs are tied together |
+| Throughput (吞吐量) | How much work per second (e.g. 3,000 orders/sec) |
+| Latency (延迟) | How long you wait between clicking and seeing a result |
+| Decoupling (解耦) | Change A without touching B, because the two talk through one agreed doorway |
+| Fallback (兜底) | The backup plan for when the normal path fails |
+| Convergence (收敛) | It narrows down and settles on one result |
+| Confidence interval (置信区间) | The honest version of "about 20%": the true value sits between 18% and 22%, with 95% confidence |
+| Technical debt (技术债) | Code written fast to hit a deadline; you pay it back with interest later |
+| Align / sync up (对齐 / 拉通) | A meeting to agree, so everyone works from the same understanding |
+| Close the loop (闭环) | Start to finish: who asked, who did it, and telling the asker when it is done |
+| Empowering (赋能) | Giving you the tools or training so you can do it yourself |
+| P0 / P1 | Severity: P0 = everything is down, fix it now; P1 = some people can't use it, fix it today |
+| SLO | A promise to users, e.g. 99.9% of requests return within 200ms |
+| Semantic (语义化) | Named so you can tell what it is at a glance (`userList`, not `arr2`) |
+| Progressive enhancement (渐进增强) | Everyone gets the basics; better devices or browsers get a little more |
+| End to end (端到端) | Test the whole path, from the user's click to the result |
 
-这张表就是补丁位：用户每骂一个新词，加一行。
+Not in the table? Translate live with the same shape: **one plain sentence plus one concrete example in brackets.**
 
-## 常见术语 → 大白话（示例库）
+## Personal blacklist — swap on sight
 
-| 术语 | 说人话 |
+These words are the ones the user hates. Delete on sight, then rewrite in the format above.
+
+| Don't write | Write |
 |---|---|
-| 幂等 | 同样的操作做 10 次，结果和第 1 次一样（重复点「提交」不会扣两次钱） |
-| 缓存击穿 | 一个热门数据刚过期，几千个请求同时涌向数据库，把它压垮 |
-| 熔断 | 下游一直报错就先别调了，直接返回兜底结果，免得一起死 |
-| 灰度发布 | 先给 1% 用户上新版本，没问题再全量 |
-| 事务 | 几步操作要么全成、要么全不成（转账的扣款和到账绑在一起） |
-| 吞吐量 | 每秒能处理多少活（例：每秒 3000 单） |
-| 延迟 | 从点下按钮到看见结果要等多久 |
-| 解耦 | 改 A 不用动 B，两边按一个约定好的接口说话 |
-| 兜底 | 正常路子走不通时的备用方案 |
-| 收敛 | 越跑越窄，最后稳定到一个结果 |
-| 置信区间 | 「大概 20%」的诚实版：真实值有 95% 概率在 18%–22% 之间 |
-| 技术债 | 为赶工先凑合写的代码，以后要连本带利还 |
-| 对齐 / 拉通 | 开会把话说明白，大家按同一个理解做事 |
-| 闭环 | 有始有终：谁提的、谁做的、做完告诉提的人 |
-| 赋能 | 给你工具或培训，让你自己能干 |
-| P0 / P1 | 事故等级：P0 = 全站挂了马上修；P1 = 一部分人不能用，今天修 |
-| SLO | 对用户的承诺指标，例：99.9% 的请求 200ms 内返回 |
-| 语义化 | 给东西起个一看就懂的名字（`userList` 而不是 `arr2`） |
-| 渐进增强 | 基础功能谁都能用；设备或浏览器好的话再多给点 |
-| 端到端 | 从用户点按钮到结果出来，整条路都测 |
+| Empower / 赋能 | Give you the tools or training so you can do it yourself |
+| Leverage / 抓手 | Where to start (e.g. fix the login page first) |
+| Granularity / 颗粒度 | How detailed (per day, or per hour?) |
+| Align / sync / 对齐 / 拉通 | A meeting to agree, so everyone understands the same thing |
+| Playbook / 打法 / 组合拳 | Exactly which few things we will do |
+| Underlying logic / 底层逻辑 | The real reason |
+| Retro / 复盘 | After-the-fact summary: what worked, what didn't |
+| First / Second / In conclusion / 首先 / 其次 / 综上 | Delete. Use a numbered list or short sentences. |
+| Great question / Let me take a look / 好问题 | Delete. First line = the answer or the action. |
+| Hope this helps / Anything else? / 希望有帮助 | Delete. End with "next, do X". |
 
-表里没有的，照同样格式现场翻：**一句白话 + 括号里一个具体例子**。
+This table is the patch point: every new word the user complains about gets a row.
 
-## 改写示例
+## Rewrite examples
 
-**技术 · 改前**
-> 该接口采用异步消息队列解耦，并通过失败重试与死信队列保证最终一致性。
+**Technical — before**
 
-**改后**
-> 用户点「下单」后立刻返回「已提交」，不用等仓库确认。真正的处理交给后台队列慢慢做：失败了自己重试 3 次，3 次还失败就扔进「死信队列」——专门放处理不了的订单，等人工去看。所以用户可能过几秒才收到「已确认」，但不会没有结果。
+> The endpoint is decoupled via an asynchronous message queue, with retries and a dead-letter queue providing eventual consistency.
 
-**职场 · 改前**
-> 我们需要拉通各方对齐优先级，形成闭环，避免资源浪费。
+**After**
 
-**改后**
-> 今天下午 3 点开 30 分钟会，定三件事：谁做、什么时候做完、做完告诉谁。定完我发一条消息，大家回「确认」。这样不会两个人做同一件事。
+> When someone clicks "Order", they immediately see "Submitted" — no waiting for the warehouse. The real work goes to a background queue that runs on its own: if it fails, it retries 3 times; if it still fails, the order lands in the "dead-letter queue", a place for orders that need a human to look at them. So a user may see "Confirmed" a few seconds later, but never nothing.
 
-**数据 · 改前**
-> 两组差异不显著，p > 0.05。
+**Workplace — before**
 
-**改后**
-> 新版点击率 5.2%、旧版 4.9%，差 0.3 个百分点。但两边各只有 200 人，这点差距很可能只是运气——就像抛 10 次硬币出现 6 次正面，说明不了硬币有问题。要下结论得测够 1 万人。
+> We need to align all parties on priorities and close the loop to avoid wasted effort.
 
-## 发出去之前 30 秒自检
+**After**
 
-1. 每个缩写第一次出现，是否当场展开了？
-2. 有没有至少一个具体例子或数字？（没有 = 没讲清楚）
-3. 单句超过 25 个字？拆两句。
-4. 改写后长度 ≤ 原文 1.5 倍？超了就是在灌水，删。
-5. 换个外行读一遍，他会不会问「这是什么意思」？
+> 30-minute meeting at 3pm today. We decide three things: who does it, when it is done, and who to tell when it is done. Then I send one message and everyone replies "confirmed". That way two people don't do the same job.
 
-## 别做过头
+**Data — before**
 
-- **不牺牲精度**：术语本身是精度时保留，用「白话（术语：X，例：…）」格式，别为了通俗把话说错
-- **不幼稚化**：「就像小朋友搭积木一样」不叫说人话，叫敷衍
-- **不动原文**：代码、命令、配置、API 名、错误信息、日志照抄
-- **跟着用户走**：用户用「幂等」提问，就继续用「幂等」，只在旁边补一句白话
-- **该专业就专业**：用户明确要 API 文档式回答、答辩稿、或受众是同行专家 → 保持原样，别加解释
+> The difference between the groups is not significant, p > 0.05.
 
-## 常见借口（出现即违规）
+**After**
 
-| 借口 | 现实 |
+> New version: 5.2% click rate. Old: 4.9%. A gap of 0.3 points. But each group had only 200 people, so the gap is probably luck — like flipping a coin 10 times and getting 6 heads; that doesn't prove the coin is rigged. To be sure, we would need 10,000 people.
+
+**Level 2 — before**
+
+> Your session token expired, so we cleared the local cache and you need to re-authenticate.
+
+**After**
+
+> You were logged out.
+>
+> It happens when the "I'm still here" ticket runs out. Like a library card that expires — the library still has your books, you just need a new card.
+>
+> Next: click "Sign in" and type your password. It takes 10 seconds.
+
+## 30-second self-check before sending
+
+1. Is every acronym spelled out the first time it appears?
+2. Is there at least one concrete example or number? (No = you have not explained it)
+3. Any sentence over 20 words (Level 1) or 10 words (Level 2)? Split it.
+4. Is the reply ≤ 800 characters (and ≤1.5× the original)? Over the cap → cut background first, then the second example, then repetition — keep conclusion + one example + next action.
+5. Would a non-expert ask "what does that mean?" (Level 2: would a 10-year-old?)
+
+## Don't overdo it
+
+- **Never trade accuracy for simplicity.** When the term carries precision, keep it and gloss it: plain words (term: X, e.g. …). A friendly explanation that is wrong is worse than jargon.
+- **Don't infantilize.** "It's like building blocks for kids" is not plain, it is patronizing. Level 2 means simple, not silly.
+- **Don't touch verbatim text.** Code, commands, config, API names, error messages, logs — copy them exactly.
+- **Follow the user's vocabulary.** If they said "idempotent", keep saying "idempotent"; just gloss it once.
+- **Stay professional when it is called for.** API reference, defense deck, expert audience → keep the original register, no glosses.
+
+## Excuses that are banned
+
+| Excuse | Reality |
 |---|---|
-| 用户是工程师，不用解释 | 工程师也未必懂你这行的缩写；解释一句 5 秒，他搜一遍 5 分钟 |
-| 说白话就不精确了 | 白话 + 括号补术语，两个都要；只留术语 = 只有你懂 |
-| 加例子太啰嗦 | 一个例子省掉三轮追问，净赚 |
-| 这词没法翻译 | 翻不了就举例：在一次具体请求里它干了什么 |
-| 时间太紧 | 用户看不懂回来问，更贵 |
+| The user is an engineer, no need to explain | Engineers don't know your domain's acronyms. One sentence costs 5 seconds; a search costs 5 minutes. |
+| Plain words lose precision | Plain words plus the term in brackets keeps both. The term alone means only you understand it. |
+| Examples are wordy | One example replaces three follow-up questions. Net win. |
+| There's no plain way to say it | Then show it: what does it do in one concrete request? |
+| No time | A confused reader costs more time than the rewrite. |
